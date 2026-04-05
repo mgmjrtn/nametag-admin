@@ -55,6 +55,8 @@
     }
     .topbar .brand { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: .3px; }
     .topbar .label { font-size: 15px; font-weight: 600; letter-spacing: .3px; color: var(--text-dim); }
+    .topbar-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+    .topbar-logo:hover .brand { color: var(--accent); }
     .topbar .home-link { margin-left: auto; font-size: 13px; color: var(--text-dim); }
     .topbar .home-link:hover { color: var(--text); }
 
@@ -162,8 +164,10 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="nt-icon"></div>
-    <span class="brand">Nametag</span>
+    <a href="{{ url_for('index') }}" class="topbar-logo">
+      <div class="nt-icon"></div>
+      <span class="brand">Nametag</span>
+    </a>
     <span class="label">Admin</span>
     {% if request.endpoint != 'index' %}
     <a href="{{ url_for('index') }}" class="home-link">&larr; Dashboard</a>
