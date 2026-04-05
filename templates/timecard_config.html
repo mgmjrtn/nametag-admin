@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Timecard CSV Configuration — Nametag Admin{% endblock %}
+
+{% block content %}
+<h1>Timecard CSV Configuration</h1>
+<p class="subtitle">Update the timecard CSV output format. Add, edit, or remove entries.</p>
+
+<div class="card">
+  <form action="{{ url_for('timecard_config_update') }}" method="POST">
+    <div class="form-row">
+      <div class="field">
+        <label>{{ header_a }}</label>
+        <input type="text" name="val_a" value="{{ val_a }}">
+      </div>
+      <div class="field">
+        <label>{{ header_b }}</label>
+        <input type="text" name="val_b" value="{{ val_b }}">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+  </form>
+</div>
+{% endblock %}

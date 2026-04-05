@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Data Configuration — Nametag Admin{% endblock %}
+
+{% block content %}
+<h1>Data Configuration</h1>
+<p class="subtitle">Each row maps a source name to a Google Sheet link. Row 1 is the header (not editable).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:40px">#</th>
+      <th>Source Name</th>
+      <th>Link</th>
+      <th style="width:140px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in entries %}
+    <tr id="view-{{ e.row }}">
+      <td style="color:var(--text-dim)">{{ e.row }}</td>
+      <td>{{ e.name }}</td>
+      <td><a href="{{ e.link }}" target="_blank" rel="noopener">{{ e.link[:60] }}{% if e.link|length > 60 %}&hellip;{% endif %}</a></td>
+      <td class="actions">
+        <button class="btn btn-ghost btn-sm" onclick="toggleEdit({{ e.row }})">Edit</button>
+        <form action="{{ url_for('data_config_delete', row=e.row) }}" method="POST" style="display:inline"
+              onsubmit="return confirm('Delete row {{ e.row }}?')">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </td>
+    </tr>
+    <tr id="edit-{{ e.row }}" style="display:none">
+      <td></td>
+      <td colspan="3">
+        <form action="{{ url_for('data_config_update', row=e.row) }}" method="POST">
+          <div class="form-row">
+            <div class="field">
+              <label>Source Name</label>
+              <input type="text" name="name" value="{{ e.name }}">
+            </div>
+            <div class="field">
+              <label>Link</label>
+              <input type="url" name="link" value="{{ e.link }}">
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleEdit({{ e.row }})">Cancel</button>
+          </div>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="card">
+  <h2 style="margin-bottom:16px">Add New Source</h2>
+  <form action="{{ url_for('data_config_add') }}" method="POST">
+    <div class="form-row">
+      <div class="field">
+        <label>Source Name</label>
+        <input type="text" name="name" placeholder="e.g. HR Database" required>
+      </div>
+      <div class="field">
+        <label>Link</label>
+        <input type="url" name="link" placeholder="https://docs.google.com/spreadsheets/d/…">
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </form>
+</div>
+
+<script>
+function toggleEdit(row) {
+  const view = document.getElementById('view-' + row);
+  const edit = document.getElementById('edit-' + row);
+  const showing = edit.style.display !== 'none';
+  view.style.display = showing ? '' : 'none';
+  edit.style.display = showing ? 'none' : '';
+}
+</script>
+{% endblock %}

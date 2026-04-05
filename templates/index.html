@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Nametag Admin — Dashboard{% endblock %}
+
+{% block content %}
+<h1>Nametag Demo Admin</h1>
+<p class="subtitle">Manage configuration for the Nametag n8n demo environment.</p>
+
+<a href="{{ url_for('data_config') }}" style="text-decoration:none;color:inherit;">
+  <div class="card">
+    <h2>Nametag Data Configuration</h2>
+    <p>Manage data source names and their linked Google Sheets. Add, edit, or remove entries.</p>
+    <span class="arrow">Open &rarr;</span>
+  </div>
+</a>
+
+<a href="{{ url_for('timecard_config') }}" style="text-decoration:none;color:inherit;">
+  <div class="card">
+    <h2>Nametag Timecard CSV Configuration</h2>
+    <p>Update the timecard CSV output format. Add, edit, or remove entries.</p>
+    <span class="arrow">Open &rarr;</span>
+  </div>
+</a>
+{% endblock %}
