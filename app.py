@@ -62,6 +62,13 @@ def index():
     return render_template("index.html")
 
 
+# ===== DOCS PAGE ===============================================================
+
+@app.route("/docs")
+def docs():
+    return render_template("docs.html")
+
+
 # ===== DATA CONFIG — full CRUD on rows 2+ ====================================
 
 @app.route("/data-config")
