@@ -118,7 +118,7 @@ def data_config_delete(row):
     return redirect(url_for("data_config"))
 
 
-# ===== TIMECARD CONFIG — update row 2, cols A & B only ========================
+# ===== TIMECARD CONFIG — full CRUD on rows 2+ ================================
 
 @app.route("/timecard-config")
 def timecard_config():
@@ -126,25 +126,49 @@ def timecard_config():
         rows = read_sheet(TIMECARD_SHEET_ID)
     except Exception as e:
         flash(f"Could not read sheet: {e}", "error")
-        rows = [["Column A", "Column B"], ["", ""]]
-    header_a = rows[0][0] if len(rows) > 0 and len(rows[0]) > 0 else "Column A"
-    header_b = rows[0][1] if len(rows) > 0 and len(rows[0]) > 1 else "Column B"
-    val_a = rows[1][0] if len(rows) > 1 and len(rows[1]) > 0 else ""
-    val_b = rows[1][1] if len(rows) > 1 and len(rows[1]) > 1 else ""
-    return render_template(
-        "timecard_config.html",
-        header_a=header_a, header_b=header_b,
-        val_a=val_a, val_b=val_b,
-    )
+        rows = []
+    entries = []
+    for i, row in enumerate(rows[1:], start=2):
+        entries.append({
+            "row": i,
+            "field": row[0] if len(row) > 0 else "",
+            "description": row[1] if len(row) > 1 else "",
+        })
+    return render_template("timecard_config.html", entries=entries)
 
 
-@app.route("/timecard-config/update", methods=["POST"])
-def timecard_config_update():
-    val_a = request.form.get("val_a", "").strip()
-    val_b = request.form.get("val_b", "").strip()
+@app.route("/timecard-config/add", methods=["POST"])
+def timecard_config_add():
+    field = request.form.get("field", "").strip()
+    description = request.form.get("description", "").strip()
+    if not field:
+        flash("Field name is required.", "error")
+        return redirect(url_for("timecard_config"))
     try:
-        write_sheet(TIMECARD_SHEET_ID, "update", row=2, values=[val_a, val_b])
-        flash("Timecard config updated.", "success")
+        write_sheet(TIMECARD_SHEET_ID, "append", values=[field, description])
+        flash(f"Added '{field}'.", "success")
+    except Exception as e:
+        flash(f"Write failed: {e}", "error")
+    return redirect(url_for("timecard_config"))
+
+
+@app.route("/timecard-config/update/<int:row>", methods=["POST"])
+def timecard_config_update(row):
+    field = request.form.get("field", "").strip()
+    description = request.form.get("description", "").strip()
+    try:
+        write_sheet(TIMECARD_SHEET_ID, "update", row=row, values=[field, description])
+        flash(f"Row {row} updated.", "success")
+    except Exception as e:
+        flash(f"Write failed: {e}", "error")
+    return redirect(url_for("timecard_config"))
+
+
+@app.route("/timecard-config/delete/<int:row>", methods=["POST"])
+def timecard_config_delete(row):
+    try:
+        write_sheet(TIMECARD_SHEET_ID, "delete", row=row)
+        flash("Row deleted.", "success")
     except Exception as e:
         flash(f"Write failed: {e}", "error")
     return redirect(url_for("timecard_config"))
