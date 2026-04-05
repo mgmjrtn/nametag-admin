@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+{% block title %}Docs — Nametag Admin{% endblock %}
+
+{% block content %}
+<h1>Documentation</h1>
+<p class="subtitle">Reference guides for the Nametag demo environment and admin tool.</p>
+
+<div class="doc-tabs">
+  <button class="doc-tab active" onclick="showDoc('workflow')">PoC Workflow Tool</button>
+  <button class="doc-tab" onclick="showDoc('admin')">Admin Tool User Guide</button>
+</div>
+
+<!-- ============================================================ -->
+<!-- DOC 1: PoC Workflow Tool Functional Summary -->
+<!-- ============================================================ -->
+<div id="doc-workflow" class="doc-body">
+
+  <div class="doc-section">
+    <h2>Nametag PoC Workflow Tool — Functional Summary</h2>
+    <p>A workflow tool powered by Agent AI that helps Nametag reduce time spent on repetitive operational work, navigate disconnected systems more quickly, and make it easier to work with data that may not match across sources.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Purpose</h3>
+    <p>The tool is built around a simple idea: let a user interact in plain language through chat, route the request to the right workflow, add identity verification when needed, and return a useful output quickly in a format the user can act on.</p>
+    <p style="margin-top:12px">In this Proof of Concept, the tool demonstrates four live functions:</p>
+    <ul>
+      <li>Quick Docs Helper</li>
+      <li>Customer Data Analysis Agent</li>
+      <li>Operations notes summary/email</li>
+      <li>Operations quick time entry</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h3>What problem this solves</h3>
+    <p>The demo is built around the operating challenges described in the Nametag scenario:</p>
+    <ul>
+      <li>Disconnected systems</li>
+      <li>Manual workflows when exceptions arise</li>
+      <li>Inconsistent or unreliable data across tools</li>
+      <li>Rising audit/compliance pressure</li>
+      <li>Engineers spending time on operational work instead of product work</li>
+      <li>Pressure to simplify, not add more tooling</li>
+    </ul>
+    <p style="margin-top:12px">This workflow tool addresses those challenges by giving users a single conversational entry point, reducing context switching, speeding up common operational tasks, and creating outputs that are easier to review, share, and act on.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Available commands</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>Function</th>
+          <th>IDV Required</th>
+          <th>What it does</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>operations admin</code></td>
+          <td>Operations notes summary/email</td>
+          <td>Yes</td>
+          <td>Invokes operations admin mode for notes summarization and email-oriented follow-up work.</td>
+        </tr>
+        <tr>
+          <td><code>data find</code></td>
+          <td>Customer Data Analysis Agent</td>
+          <td>Yes</td>
+          <td>Invokes the customer data analysis mode for cross-source lookup, comparison, and discrepancy review.</td>
+        </tr>
+        <tr>
+          <td><code>doc help</code></td>
+          <td>Quick Docs Helper</td>
+          <td>No</td>
+          <td>Invokes the documentation help mode for fast answers, summaries, and document guidance.</td>
+        </tr>
+        <tr>
+          <td><code>help</code></td>
+          <td>Application help</td>
+          <td>No</td>
+          <td>Shows available functions and helps the user understand what they can ask for.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="doc-section">
+    <h3>Function 1: Quick Docs Helper</h3>
+    <p>Helps a user find and work with internal documentation more quickly. Designed for moments when someone needs a fast answer, a summary, or help locating the right information without manually searching through multiple sources.</p>
+    <p style="margin-top:10px"><strong>How it works:</strong> The user asks in plain language → the workflow recognizes it as a docs request → the agent retrieves relevant content → returns a concise, readable answer through chat.</p>
+    <p style="margin-top:10px"><strong>Business value:</strong> Reduces time lost searching for information, lowers friction for common internal questions, and helps teams navigate knowledge faster without extra manual effort.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Function 2: Customer Data Analysis Agent</h3>
+    <p>Helps a user review customer-related data when that data exists in multiple sources and does not fully match. Especially useful when someone needs to understand what is happening across data sources and where discrepancies may exist.</p>
+    <p style="margin-top:10px"><strong>How it works:</strong> The user requests a data lookup → the workflow routes to the data function → the agent reads from configured sources → compares values and identifies meaningful differences → returns a summarized analysis.</p>
+    <p style="margin-top:10px"><strong>Crawl → Walk → Run framing:</strong></p>
+    <ul>
+      <li><strong>Crawl:</strong> Recognize the data problem exists</li>
+      <li><strong>Walk:</strong> Compare sources, explain mismatches, help users act faster</li>
+      <li><strong>Run:</strong> Eventually integrate more deeply, merge sources, or update system-of-record design</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h3>Function 3: Operations notes summary/email</h3>
+    <p>Turns meeting notes or operational notes into a concise summary and an email-ready output. Designed to reduce the follow-up burden that often falls on engineering or operations staff after meetings.</p>
+    <p style="margin-top:10px"><strong>How it works:</strong> The user submits notes → the workflow routes to the operations notes function → the agent summarizes → prepares or sends the email output → result is returned through chat and email.</p>
+    <p style="margin-top:10px"><strong>Business value:</strong> Reduces repetitive admin work after meetings, improves consistency of summaries, and helps engineers spend less time on operational documentation.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Function 4: Operations quick time entry</h3>
+    <p>Helps a user create a structured time-entry output quickly through chat. In the current demo, the output is a CSV delivered back through WhatsApp.</p>
+    <p style="margin-top:10px"><strong>How it works:</strong> The user sends time entry information through chat → the workflow routes to the time-entry function → the agent structures the entries into the required CSV format → the output is returned through WhatsApp.</p>
+    <p style="margin-top:10px"><strong>Business value:</strong> Reduces a manual operational task that can consume about an hour each week, gives users a faster path from raw work notes to a structured upload format.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Identity verification in the workflow</h3>
+    <p>For protected functions (<code>operations admin</code> and <code>data find</code>), the workflow includes a Nametag-style identity verification sequence.</p>
+    <p style="margin-top:10px"><strong>Verification sequence:</strong> Request begins → verification is initiated → a link/session is completed → the verified result returns into the workflow → the workflow continues with the downstream action.</p>
+    <p style="margin-top:10px">This shows where Nametag fits in a broader operational flow, rather than presenting identity verification as a standalone feature.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Demo assumptions</h3>
+    <ul>
+      <li>Customer performance data exists in multiple sources and does not fully match</li>
+      <li>Engineering teams are spending too much time on operational work</li>
+      <li>Two especially valuable operational targets: meeting notes summaries/emails, and weekly timecard entry</li>
+      <li>The customer wants simplification, not another complicated tool</li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ============================================================ -->
+<!-- DOC 2: Admin Tool User Guide -->
+<!-- ============================================================ -->
+<div id="doc-admin" class="doc-body" style="display:none">
+
+  <div class="doc-section">
+    <h2>Nametag Demo Admin — User Guide</h2>
+    <p>A lightweight configuration manager for the Nametag n8n demo environment. Manage the Google Sheets that drive the demo workflows through a clean browser-based interface — without ever opening a spreadsheet directly.</p>
+    <p style="margin-top:10px"><strong>URL:</strong> <a href="https://nametag-admin.onrender.com" target="_blank">https://nametag-admin.onrender.com</a></p>
+  </div>
+
+  <div class="doc-section">
+    <h3>What this tool manages</h3>
+    <table>
+      <thead>
+        <tr><th>Section</th><th>What it controls</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nametag Data Configuration</td>
+          <td>The list of data sources (name + link) used by the demo</td>
+        </tr>
+        <tr>
+          <td>Nametag Timecard CSV Configuration</td>
+          <td>The field definitions for the timecard CSV output format</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:10px">Changes made here are written directly to the underlying Google Sheets in real time. The n8n demo workflow reads from those same sheets, so changes take effect immediately.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Getting started</h3>
+    <ol>
+      <li>Open a browser and go to <a href="https://nametag-admin.onrender.com" target="_blank">https://nametag-admin.onrender.com</a></li>
+      <li>You'll land on the Dashboard — two cards, one for each configuration area</li>
+      <li>Click <strong>Open →</strong> on either card to enter that section</li>
+    </ol>
+    <p style="margin-top:10px" class="doc-note">⚠️ The app runs on Render's free tier and will sleep after 15 minutes of inactivity. If the page takes 20–30 seconds to load, that's normal — it's waking up. Open it a minute before you need it during a demo.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Nametag Data Configuration</h3>
+    <p>Manages the list of named data sources used by the demo. Each entry has a <strong>Source Name</strong> and a <strong>Link</strong> (a Google Sheets URL). The demo workflow uses this list to know which data sources are available.</p>
+
+    <h4>Add a new entry</h4>
+    <ol>
+      <li>Scroll to the <strong>Add New Source</strong> form at the bottom of the page</li>
+      <li>Enter a Source Name (required) and Link (optional but recommended)</li>
+      <li>Click <strong>Add</strong></li>
+    </ol>
+
+    <h4>Edit an existing entry</h4>
+    <ol>
+      <li>Click <strong>Edit</strong> on the row you want to change</li>
+      <li>An inline form will appear with current values pre-filled</li>
+      <li>Make your changes and click <strong>Save</strong>, or <strong>Cancel</strong> to discard</li>
+    </ol>
+
+    <h4>Delete an entry</h4>
+    <ol>
+      <li>Click <strong>Delete</strong> on the row you want to remove</li>
+      <li>Confirm the deletion when prompted</li>
+    </ol>
+    <p style="margin-top:8px" class="doc-note">⚠️ Deleting an entry removes it from the Google Sheet permanently. There is no undo.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Nametag Timecard CSV Configuration</h3>
+    <p>Manages the field definitions that control the format of the timecard CSV output. Each entry defines a <strong>field name</strong> (the column header) and a <strong>description</strong> of the expected data format.</p>
+
+    <h4>Add a new field</h4>
+    <ol>
+      <li>Scroll to the <strong>Add New Field</strong> form at the bottom</li>
+      <li>Enter the field name (required) and a description of valid values</li>
+      <li>Click <strong>Add</strong></li>
+    </ol>
+
+    <h4>Edit an existing field</h4>
+    <ol>
+      <li>Click <strong>Edit</strong> on the row you want to update</li>
+      <li>Modify the field name or description</li>
+      <li>Click <strong>Save</strong> or <strong>Cancel</strong></li>
+    </ol>
+
+    <h4>Delete a field</h4>
+    <ol>
+      <li>Click <strong>Delete</strong> on the row to remove</li>
+      <li>Confirm when prompted</li>
+    </ol>
+    <p style="margin-top:8px" class="doc-note">⚠️ Make sure the demo workflow doesn't depend on a field before deleting it.</p>
+  </div>
+
+  <div class="doc-section">
+    <h3>Tips &amp; notes</h3>
+    <ul>
+      <li><strong>Changes are live immediately.</strong> No publish or sync step — changes write to Google Sheets right away.</li>
+      <li><strong>Row numbers matter.</strong> Be cautious about deleting entries mid-list, as it shifts row numbers for everything below.</li>
+      <li><strong>The header row is protected.</strong> Row 1 in each sheet is never shown or editable in this app.</li>
+      <li><strong>First load may be slow.</strong> Plan to open the app a minute before you need it during a demo.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h3>Troubleshooting</h3>
+    <table>
+      <thead>
+        <tr><th>Problem</th><th>What to check</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Could not read sheet" error</td>
+          <td>The Google Sheet may no longer be shared publicly. Open the sheet, click Share, confirm "Anyone with the link" can view.</td>
+        </tr>
+        <tr>
+          <td>"Write failed" error when saving</td>
+          <td>Paste the Apps Script URL in a browser — it should return <code>{"status":"ok"}</code>. Also confirm "Who has access" is set to "Anyone" in the Apps Script deployment.</td>
+        </tr>
+        <tr>
+          <td>Page is blank or won't load</td>
+          <td>The app may be sleeping. Wait 30–60 seconds and refresh.</td>
+        </tr>
+        <tr>
+          <td>Changes don't show up in the demo</td>
+          <td>Re-trigger the n8n workflow after making changes — it reads the sheet at trigger time.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<style>
+.doc-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+}
+.doc-tab {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dim);
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color .15s, border-color .15s;
+}
+.doc-tab:hover { color: var(--text); }
+.doc-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.doc-body { max-width: 760px; }
+.doc-section {
+  margin-bottom: 36px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid var(--border);
+}
+.doc-section:last-child { border-bottom: none; }
+.doc-section h2 { font-size: 22px; color: var(--text); margin-bottom: 12px; }
+.doc-section h3 { font-size: 16px; color: var(--text); margin-bottom: 10px; margin-top: 0; }
+.doc-section h4 { font-size: 13px; font-weight: 700; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; margin: 16px 0 8px; }
+.doc-section p { color: var(--text-body); font-size: 14px; line-height: 1.7; }
+.doc-section ul, .doc-section ol { padding-left: 20px; color: var(--text-body); font-size: 14px; line-height: 1.8; }
+.doc-section li { margin-bottom: 4px; }
+.doc-section code {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 12px;
+  font-family: "SF Mono", "Fira Code", monospace;
+  color: var(--accent);
+}
+.doc-note {
+  background: rgba(77,142,255,.08);
+  border: 1px solid rgba(77,142,255,.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+</style>
+
+<script>
+function showDoc(id) {
+  document.querySelectorAll('.doc-body').forEach(d => d.style.display = 'none');
+  document.querySelectorAll('.doc-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('doc-' + id).style.display = 'block';
+  event.target.classList.add('active');
+}
+</script>
+{% endblock %}
