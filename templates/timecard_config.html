@@ -3,78 +3,21 @@
 
 {% block content %}
 <h1>Timecard CSV Configuration</h1>
-<p class="subtitle">Manage the timecard CSV fields and their expected data formats. Row 1 is the header (not editable).</p>
-
-<table>
-  <thead>
-    <tr>
-      <th style="width:40px">#</th>
-      <th>Fields/Columns</th>
-      <th>Description/Data Expected</th>
-      <th style="width:140px">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for e in entries %}
-    <tr id="view-{{ e.row }}">
-      <td style="color:var(--text-dim)">{{ e.row }}</td>
-      <td>{{ e.field }}</td>
-      <td>{{ e.description }}</td>
-      <td class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="toggleEdit({{ e.row }})">Edit</button>
-        <form action="{{ url_for('timecard_config_delete', row=e.row) }}" method="POST" style="display:inline"
-              onsubmit="return confirm('Delete row {{ e.row }}?')">
-          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-        </form>
-      </td>
-    </tr>
-    <tr id="edit-{{ e.row }}" style="display:none">
-      <td></td>
-      <td colspan="3">
-        <form action="{{ url_for('timecard_config_update', row=e.row) }}" method="POST">
-          <div class="form-row">
-            <div class="field">
-              <label>Fields/Columns</label>
-              <input type="text" name="field" value="{{ e.field }}">
-            </div>
-            <div class="field">
-              <label>Description/Data Expected</label>
-              <input type="text" name="description" value="{{ e.description }}">
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm">Save</button>
-            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleEdit({{ e.row }})">Cancel</button>
-          </div>
-        </form>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<p class="subtitle">Update the timecard CSV output format. Add, edit, or remove entries.</p>
 
 <div class="card">
-  <h2 style="margin-bottom:16px">Add New Field</h2>
-  <form action="{{ url_for('timecard_config_add') }}" method="POST">
+  <form action="{{ url_for('timecard_config_update') }}" method="POST">
     <div class="form-row">
       <div class="field">
-        <label>Fields/Columns</label>
-        <input type="text" name="field" placeholder="e.g. department" required>
+        <label>{{ header_a }}</label>
+        <input type="text" name="val_a" value="{{ val_a }}">
       </div>
       <div class="field">
-        <label>Description/Data Expected</label>
-        <input type="text" name="description" placeholder="e.g. Sales, Engineering, etc.">
+        <label>{{ header_b }}</label>
+        <input type="text" name="val_b" value="{{ val_b }}">
       </div>
-      <button type="submit" class="btn btn-primary">Add</button>
     </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
   </form>
 </div>
-
-<script>
-function toggleEdit(row) {
-  const view = document.getElementById('view-' + row);
-  const edit = document.getElementById('edit-' + row);
-  const showing = edit.style.display !== 'none';
-  view.style.display = showing ? '' : 'none';
-  edit.style.display = showing ? 'none' : '';
-}
-</script>
 {% endblock %}

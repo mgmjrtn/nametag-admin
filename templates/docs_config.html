@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Docs Link Configuration — Nametag Admin{% endblock %}
+
+{% block content %}
+<h1>Docs Link Configuration</h1>
+<p class="subtitle">Manage document source links, types, and availability. Row 1 is the header (not editable).</p>
+
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th style="width:36px">#</th>
+      <th>Source ID</th>
+      <th>Source Name</th>
+      <th>Source Type</th>
+      <th>Source URL</th>
+      <th>Enabled</th>
+      <th style="width:140px">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in entries %}
+    <tr id="view-{{ e.row }}">
+      <td style="color:var(--text-dim)">{{ e.row }}</td>
+      <td>{{ e.source_id }}</td>
+      <td>{{ e.source_name }}</td>
+      <td>{{ e.source_type }}</td>
+      <td><a href="{{ e.source_url }}" target="_blank" rel="noopener">{{ e.source_url[:45] }}{% if e.source_url|length > 45 %}&hellip;{% endif %}</a></td>
+      <td>{{ e.enabled }}</td>
+      <td class="actions">
+        <button class="btn btn-ghost btn-sm" onclick="toggleEdit({{ e.row }})">Edit</button>
+        <form action="{{ url_for('docs_config_delete', row=e.row) }}" method="POST" style="display:inline"
+              onsubmit="return confirm('Delete row {{ e.row }}?')">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </td>
+    </tr>
+    <tr id="edit-{{ e.row }}" style="display:none">
+      <td></td>
+      <td colspan="6">
+        <form action="{{ url_for('docs_config_update', row=e.row) }}" method="POST">
+          <div class="form-row">
+            <div class="field" style="flex:0.6">
+              <label>Source ID</label>
+              <input type="text" name="source_id" value="{{ e.source_id }}">
+            </div>
+            <div class="field">
+              <label>Source Name</label>
+              <input type="text" name="source_name" value="{{ e.source_name }}">
+            </div>
+            <div class="field" style="flex:0.6">
+              <label>Source Type</label>
+              <input type="text" name="source_type" value="{{ e.source_type }}">
+            </div>
+            <div class="field">
+              <label>Source URL</label>
+              <input type="url" name="source_url" value="{{ e.source_url }}">
+            </div>
+            <div class="field" style="flex:0.4">
+              <label>Enabled</label>
+              <input type="text" name="enabled" value="{{ e.enabled }}">
+            </div>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="toggleEdit({{ e.row }})">Cancel</button>
+          </div>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<div class="card" style="margin-top:8px;">
+  <h2 style="margin-bottom:16px; color:var(--text);">Add new document source</h2>
+  <form action="{{ url_for('docs_config_add') }}" method="POST">
+    <div class="form-row">
+      <div class="field" style="flex:0.6">
+        <label>Source ID</label>
+        <input type="text" name="source_id" placeholder="e.g. DOC-001" required>
+      </div>
+      <div class="field">
+        <label>Source Name</label>
+        <input type="text" name="source_name" placeholder="e.g. Employee Handbook">
+      </div>
+      <div class="field" style="flex:0.6">
+        <label>Source Type</label>
+        <input type="text" name="source_type" placeholder="e.g. gdoc, pdf, url">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Source URL</label>
+        <input type="url" name="source_url" placeholder="https://docs.google.com/...">
+      </div>
+      <div class="field" style="flex:0.4">
+        <label>Enabled</label>
+        <input type="text" name="enabled" placeholder="true / false">
+      </div>
+      <button type="submit" class="btn btn-primary">Add</button>
+    </div>
+  </form>
+</div>
+
+<script>
+function toggleEdit(row) {
+  var view = document.getElementById('view-' + row);
+  var edit = document.getElementById('edit-' + row);
+  var showing = edit.style.display !== 'none';
+  view.style.display = showing ? '' : 'none';
+  edit.style.display = showing ? 'none' : '';
+}
+</script>
+{% endblock %}
