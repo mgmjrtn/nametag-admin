@@ -162,8 +162,10 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="nt-icon"></div>
-    <span class="brand">Nametag</span>
+    <a href="{{ url_for('index') }}" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:10px;">
+      <div class="nt-icon"></div>
+      <span class="brand">Nametag</span>
+    </a>
     <span class="label">Admin</span>
     <div style="margin-left:auto; display:flex; align-items:center; gap:16px;">
       {% if request.endpoint != 'index' %}
