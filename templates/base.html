@@ -165,9 +165,12 @@
     <div class="nt-icon"></div>
     <span class="brand">Nametag</span>
     <span class="label">Admin</span>
-    {% if request.endpoint != 'index' %}
-    <a href="{{ url_for('index') }}" class="home-link">&larr; Dashboard</a>
-    {% endif %}
+    <div style="margin-left:auto; display:flex; align-items:center; gap:16px;">
+      {% if request.endpoint != 'index' %}
+      <a href="{{ url_for('index') }}" class="home-link">&larr; Dashboard</a>
+      {% endif %}
+      <a href="{{ url_for('docs') }}" class="home-link" style="color:var(--accent);">Docs</a>
+    </div>
   </div>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
